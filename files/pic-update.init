@@ -1,0 +1,23 @@
+#!/bin/sh /etc/rc.common
+#set -x
+START=81
+
+APP=pic-update
+PID_FILE=/var/run/$APP.pid
+
+
+start() {
+	local _picupfl
+
+	config_load pic-update
+
+	config_get _picupfl default pic_up_fl
+	PARAMS=" $_picupfl"
+	echo $PARAMS
+	#start-stop-daemon -S -x $APP -p $PID_FILE -m -b -- $PARAMS
+	start-stop-daemon -S -x $APP -p $PID_FILE -m -- $PARAMS
+}
+
+stop() {
+	start-stop-daemon -K -n $APP -p $PID_FILE -s TERM
+}
